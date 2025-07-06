@@ -33,28 +33,28 @@ namespace PokemonBattleW
             IsAlive = isAlive;
         }
 
-        public static void LoadPokemons(string filePath)
+        public static void LoadPokemons()
         {
-            var lines = File.ReadAllLines(filePath);
-
-            for (int x = 1; x < lines.Length; x++)
+            string filePath = "../../pokemoni.txt";
+            List<Pokemon> pokemoni = new List<Pokemon>();
+            foreach (string line in File.ReadAllLines(filePath))
             {
-                var parts = lines[x].Split(',');
-
-                int id = int.Parse(parts[0]);
-                string name = parts[1];
-                int attack = int.Parse(parts[2]);
-                int defence = int.Parse(parts[3]);
-                int strength = int.Parse(parts[4]);
-                int health = int.Parse(parts[5]);
-                int owner = int.Parse(parts[6]);
-                bool isAlive = bool.Parse(parts[7]);
-
-                Pokemon p = new Pokemon(id, name, attack, defence, strength, health, owner, isAlive);
-
-                if (owner == 1) pokemoni1.Add(p);
-                else if (owner == 2) pokemoni2.Add(p);
-                //nmaika tvi
+                string[] parts = line.Split(',');
+                if (parts.Length == 8)
+                {
+                    Pokemon pokemonche = new Pokemon
+                    {
+                        //Id nqma
+                        Name = parts[1],
+                        Attack = int.Parse(parts[2]),
+                        Defence = int.Parse(parts[3]),
+                        Strength = int.Parse(parts[4]),
+                        Health = int.Parse(parts[5]),
+                        Owner = int.Parse(parts[6]),
+                        IsAlive = bool.Parse(parts[7])
+                    };
+                    pokemoni.Add(pokemonche);
+                }
             }
         }
     }

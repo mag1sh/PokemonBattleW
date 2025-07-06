@@ -10,6 +10,7 @@ namespace PokemonBattleW
     {
         static void Main(string[] args)
         {
+            Console.ReadLine();
         }
     }
 }
