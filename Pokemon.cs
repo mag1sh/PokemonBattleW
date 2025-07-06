@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PokemonBattleW
 {
@@ -36,25 +38,52 @@ namespace PokemonBattleW
         public static void LoadPokemons()
         {
             string filePath = "../../pokemoni.txt";
-            List<Pokemon> pokemoni = new List<Pokemon>();
+
+            pokemoni1.Clear();
+            pokemoni2.Clear();
+
             foreach (string line in File.ReadAllLines(filePath))
             {
                 string[] parts = line.Split(',');
                 if (parts.Length == 8)
                 {
-                    Pokemon pokemonche = new Pokemon
-                    {
-                        //Id nqma
-                        Name = parts[1],
-                        Attack = int.Parse(parts[2]),
-                        Defence = int.Parse(parts[3]),
-                        Strength = int.Parse(parts[4]),
-                        Health = int.Parse(parts[5]),
-                        Owner = int.Parse(parts[6]),
-                        IsAlive = bool.Parse(parts[7])
-                    };
-                    pokemoni.Add(pokemonche);
+                    int id = int.Parse(parts[0]);
+                    string name = parts[1];
+                    int attack = int.Parse(parts[2]);
+                    int defence = int.Parse(parts[3]);
+                    int strength = int.Parse(parts[4]);
+                    int health = int.Parse(parts[5]);
+                    int owner = int.Parse(parts[6]);
+                    bool isAlive = bool.Parse(parts[7]);
+
+                    Pokemon pokemonche = new Pokemon(id, name, attack, defence, strength, health, owner, isAlive);
+
+                    if (owner == 1) pokemoni1.Add(pokemonche);
+                    if (owner == 2) pokemoni2.Add(pokemonche);
+
                 }
+
+            }
+        }
+
+        public static void DisplayPokemonsOfPlayer1()
+        {
+            int br = 0;
+            foreach (Pokemon p in pokemoni1)
+            {
+                br++;
+                Console.WriteLine($"{br}. {p.Name}");
+            }
+
+        }
+
+        public static void DisplayPokemonsOfPlayer2()
+        {
+            int br = 0;
+            foreach (Pokemon p in pokemoni2)
+            {
+                br++;
+                Console.WriteLine($"{br}. {p.Name}");
             }
         }
     }
