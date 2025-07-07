@@ -10,8 +10,7 @@ namespace PokemonBattleW
     {
         public static int activePokemonId1;
         public static int activePokemonId2;
-
-        public static void Attack(Pokemon attacker, Pokemon defender, string attackerName)
+        public static void Attack(Pokemon attacker, Pokemon defender, int activePlayer)
         {
             if (defender.Health > 0)
             {
@@ -19,9 +18,8 @@ namespace PokemonBattleW
                 int A = rng.Next(0, attacker.Attack + 1);
                 int D = rng.Next(0, attacker.Defence + 1);
 
-
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"{attackerName} H:{attacker.Health} A:{A} ");
+                Console.Write($"Играч {activePlayer} H:{attacker.Health} A:{A} ");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write($"/ D:{D} H:{defender.Health}");
                 Console.ResetColor();
@@ -31,15 +29,14 @@ namespace PokemonBattleW
                 {
                     int damage = A - D;
                     defender.Health = Math.Max(0, defender.Health - damage);
-                    Console.WriteLine($" {attackerName} / {attacker.Name} нанесе щета на {defender.Name} | {defender.Health + damage}-{damage} ");
+                    Console.WriteLine($"Играч {activePlayer} / {attacker.Name} нанесе щета на {defender.Name} | {defender.Health + damage}-{damage} ");
                     Console.WriteLine();
                 }
                 else
                 {
-                    Console.WriteLine($"  {attackerName} / {attacker.Name} не нанесе щета (D >= A)");
+                    Console.WriteLine($"Играч {activePlayer} / {attacker.Name} не нанесе щета (D >= A)");
                     Console.WriteLine();
                 }
-
             }
 
             if (defender.Health <= 0)

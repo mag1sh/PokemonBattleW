@@ -66,22 +66,15 @@ namespace PokemonBattleW
             }
         }
 
-        public static void DisplayPokemonsOfPlayer1()
-        {
-            int br = 1;      
-            Console.WriteLine($"Покемони на играч 1:");
-            foreach (Pokemon p in pokemoni1)
-            {
-                Console.WriteLine($"{br}.{p.Name}");
-                br++;
-            }
-        }
-
-        public static void DisplayPokemonsOfPlayer2()
+        public static void DisplayPokemonsOfPlayer(int pl)
         {
             int br = 1;
-            Console.WriteLine($"Покемони на играч 2:");
-            foreach (Pokemon p in pokemoni2)
+            Console.WriteLine($"Покемони на играч {pl}:");
+            List<Pokemon> pok;
+            if (pl == 1) { pok = pokemoni1; }
+            else { pok = pokemoni2; }
+
+            foreach (Pokemon p in pok)
             {
                 Console.WriteLine($"{br}.{p.Name}");
                 br++;
@@ -89,4 +82,3 @@ namespace PokemonBattleW
         }
     }
 }
-
