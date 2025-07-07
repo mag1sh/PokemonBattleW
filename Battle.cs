@@ -11,10 +11,6 @@ namespace PokemonBattleW
         public static int activePokemonId1;
         public static int activePokemonId2;
 
-       
-
-
-
         public static void Attack(Pokemon attacker, Pokemon defender, string attackerName)
         {
             if (defender.Health > 0)

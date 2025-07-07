@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 namespace PokemonBattleW
 {
     internal class Program
-    {
-        private static int activePokemonId1;
-        private static int activePokemonId2;
-
+    {       
         static void Main(string[] args)
         {
             Pokemon.LoadPokemons();
 
-            Battle.activePokemonId1 = Game.ChoosePokemon(1, Pokemon.pokemoni1[activePokemonId1].Name);
-            Battle.activePokemonId2 = Game.ChoosePokemon(2, Pokemon.pokemoni2[activePokemonId2].Name);
+            Battle.activePokemonId1 = Game.ChoosePokemon(1, Pokemon.pokemoni1[Battle.activePokemonId1].Name);
+            Battle.activePokemonId2 = Game.ChoosePokemon(2, Pokemon.pokemoni2[Battle.activePokemonId2].Name);
             //Pokemon.DisplayPokemonsOfPlayer1();
             //Pokemon.DisplayPokemonsOfPlayer2();
             while (true)
