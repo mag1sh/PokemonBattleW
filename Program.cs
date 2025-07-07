@@ -13,6 +13,8 @@ namespace PokemonBattleW
             Battle.ChoosePokemon();
             //Pokemon.DisplayPokemonsOfPlayer1();
             //Pokemon.DisplayPokemonsOfPlayer2();
+            Battle.AttackPlayer1();
+            Battle.AttackPlayer2();
             Console.ReadLine();
         }
     }
