@@ -10,6 +10,9 @@ namespace PokemonBattleW
     {
         static void Main(string[] args)
         {
+            Battle.ChoosePokemon();
+            //Pokemon.DisplayPokemonsOfPlayer1();
+            //Pokemon.DisplayPokemonsOfPlayer2();
             Console.ReadLine();
         }
     }
