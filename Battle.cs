@@ -11,74 +11,60 @@ namespace PokemonBattleW
         public static int activePokemonId1;
         public static int activePokemonId2;
 
-        public static void ChoosePokemon()
+       
+
+
+
+        public static void Attack(Pokemon attacker, Pokemon defender, string attackerName)
         {
-            Pokemon.DisplayPokemonsOfPlayer1();
-            Console.Write("Играч 1 избери своя покемон:");
-            activePokemonId1 = int.Parse(Console.ReadLine()) - 1;
-            Console.ForegroundColor = ConsoleColor.Blue;
-            //Console.Write("\x1b[38;2;217;117;177m");
-            Console.WriteLine($"Играч 1 избра покемон {Pokemon.pokemoni1[activePokemonId1].Name}\n");
-            //Console.Write("\x1b[0m");
-            Console.ResetColor();
+            if (defender.Health > 0)
+            {
+                Random rng = new Random();
+                int A = rng.Next(0, attacker.Attack + 1);
+                int D = rng.Next(0, attacker.Defence + 1);
 
-            Pokemon.DisplayPokemonsOfPlayer2();
-            Console.Write("Играч 2 избери своя покемон:");
-            activePokemonId2 = int.Parse(Console.ReadLine()) - 1;
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine($"Играч 2 избра покемон {Pokemon.pokemoni2[activePokemonId2].Name}");
-            Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{attackerName} H:{attacker.Health} A:{A} ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"/ D:{D} H:{defender.Health}");
+                Console.ResetColor();
+                Console.WriteLine(); // optional line break
+
+                if (A > D)
+                {
+                    int damage = A - D;
+                    defender.Health = Math.Max(0, defender.Health - damage);
+                    Console.WriteLine($" {attackerName} / {attacker.Name} нанесе щета на {defender.Name} | {defender.Health + damage}-{damage} ");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine($"  {attackerName} / {attacker.Name} не нанесе щета (D >= A)");
+                    Console.WriteLine();
+                }
+
+            }
+
+            if (defender.Health <= 0)
+            {
+                Console.WriteLine($" Pokemona {defender.Name} umrq");
+                Console.WriteLine();
+
+
+                if (Pokemon.pokemoni1[activePokemonId1].ID == defender.ID)
+                {
+                    Pokemon.pokemoni1.RemoveAt(activePokemonId1);
+
+                }
+                if (Pokemon.pokemoni2[activePokemonId2].ID == defender.ID)
+                {
+                    Pokemon.pokemoni2.RemoveAt(activePokemonId2);
+                }
+                //Game.izbora();
+            }
+
         }
-
-
-        public static void AttackPlayer1()
-        {
-            int min = 0;
-
-            int max = Pokemon.pokemoni1[activePokemonId1].Attack;
-
-            Random attack = new Random();
-            int A = attack.Next(min, max + 1);
-            int maxD = Pokemon.pokemoni1[activePokemonId1].Defence;
-
-            Random defense = new Random();
-            int D = defense.Next(min, maxD + 1);
-
-            if(A > D) 
-            {
-                Pokemon.pokemoni2[activePokemonId2].Health -= A-D;
-            }
-            else if(D > A)
-            {
-                Console.WriteLine("Играч 1 не нанесе щета (D => A)");
-                Console.WriteLine(Pokemon.pokemoni2[activePokemonId2].Health);
-            }
-        }
-
-        public static void AttackPlayer2()
-        {
-            int min = 0;
-
-            int max = Pokemon.pokemoni2[activePokemonId2].Attack;
-
-            Random attack = new Random();
-            int A = attack.Next(min, max + 1);
-            int maxD = Pokemon.pokemoni2[activePokemonId2].Defence;
-
-            Random defense = new Random();
-            int D = defense.Next(min, maxD + 1);
-
-            if (A > D)
-            {
-                Pokemon.pokemoni1[activePokemonId1].Health -= A - D;
-            }
-            else
-            {
-                Console.WriteLine("Играч 2 не нанесе щета (D => A)");
-                Console.WriteLine(Pokemon.pokemoni1[activePokemonId1].Health);
-            }
-        }
-
 
     }
 }

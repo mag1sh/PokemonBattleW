@@ -68,8 +68,7 @@ namespace PokemonBattleW
 
         public static void DisplayPokemonsOfPlayer1()
         {
-            int br = 1;
-            LoadPokemons();
+            int br = 1;      
             Console.WriteLine($"Покемони на играч 1:");
             foreach (Pokemon p in pokemoni1)
             {
@@ -81,7 +80,6 @@ namespace PokemonBattleW
         public static void DisplayPokemonsOfPlayer2()
         {
             int br = 1;
-            LoadPokemons();
             Console.WriteLine($"Покемони на играч 2:");
             foreach (Pokemon p in pokemoni2)
             {
