@@ -32,7 +32,7 @@ namespace PokemonBattleW
             Strength = strength;
             Health = health;
             Owner = owner;
-            IsAlive = isAlive;
+            IsAlive = isAlive;  
         }
 
         public static void LoadPokemons()

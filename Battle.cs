@@ -19,45 +19,44 @@ namespace PokemonBattleW
                 int D = rng.Next(0, attacker.Defence + 1);
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"Играч {activePlayer} H:{attacker.Health} A:{A} ");
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"Играч {activePlayer} H:{attacker.Health} A:{A} ");                
                 Console.Write($"/ D:{D} H:{defender.Health}");
+                Console.WriteLine();
                 Console.ResetColor();
-                Console.WriteLine(); // optional line break
-
+                
                 if (A > D)
                 {
                     int damage = A - D;
                     defender.Health = Math.Max(0, defender.Health - damage);
                     Console.WriteLine($"Играч {activePlayer} / {attacker.Name} нанесе щета на {defender.Name} | {defender.Health + damage}-{damage} ");
                     Console.WriteLine();
+                    Console.ResetColor();
                 }
                 else
                 {
                     Console.WriteLine($"Играч {activePlayer} / {attacker.Name} не нанесе щета (D >= A)");
                     Console.WriteLine();
+                    Console.ResetColor();
                 }
             }
 
             if (defender.Health <= 0)
             {
-                Console.WriteLine($" Pokemona {defender.Name} umrq");
-                Console.WriteLine();
+                Console.WriteLine($"Покемонът {defender.Name} умря.");
 
-
-                if (Pokemon.pokemoni1[activePokemonId1].ID == defender.ID)
+                if (Pokemon.pokemoni1.Contains(defender))
                 {
-                    Pokemon.pokemoni1.RemoveAt(activePokemonId1);
-
+                    int index = Pokemon.pokemoni1.IndexOf(defender);
+                    Pokemon.pokemoni1.Remove(defender);
+                    if (Pokemon.pokemoni1.Count > 0) Battle.activePokemonId1 = Game.ChoosePokemon(1);
                 }
-                if (Pokemon.pokemoni2[activePokemonId2].ID == defender.ID)
+                else if (Pokemon.pokemoni2.Contains(defender))
                 {
-                    Pokemon.pokemoni2.RemoveAt(activePokemonId2);
+                    int index = Pokemon.pokemoni2.IndexOf(defender);
+                    Pokemon.pokemoni2.Remove(defender);
+                    if (Pokemon.pokemoni2.Count > 0) Battle.activePokemonId2 = Game.ChoosePokemon(2);
                 }
-                //Game.izbora();
             }
-
         }
-
     }
 }
