@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PokemonBattleW;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,14 +33,13 @@ namespace PokemonBattleW
             Strength = strength;
             Health = health;
             Owner = owner;
-            IsAlive = isAlive;  
+            IsAlive = isAlive;
         }
-
         public static void LoadPokemons()
         {
             string filePath = "../../pokemoni.txt";
 
-            //pak she sa dobavat ako go naa tva
+            //pak she sa dobavat ako go nqma tva
             pokemoni1.Clear();
             pokemoni2.Clear();
 
@@ -60,23 +60,20 @@ namespace PokemonBattleW
                 bool isAlive = bool.Parse(parts[7]);
 
                 Pokemon pokemonche = new Pokemon(id, name, attack, defence, strength, health, owner, isAlive);
-
                 if (owner == 1) pokemoni1.Add(pokemonche);
                 else if (owner == 2) pokemoni2.Add(pokemonche);
             }
         }
 
-        public static void DisplayPokemonsOfPlayer(int pl)
+        public static void DisplayPokemonsOfPlayer(int activePlayer)
         {
             int br = 1;
-            Console.WriteLine($"Покемони на играч {pl}:");
             List<Pokemon> pok;
-            if (pl == 1) { pok = pokemoni1; }
+            if (activePlayer == 1) { pok = pokemoni1; }
             else { pok = pokemoni2; }
-
             foreach (Pokemon p in pok)
             {
-                Console.WriteLine($"{br}.{p.Name}");
+                Console.Write($"{br}.{p.Name}, ");
                 br++;
             }
         }
