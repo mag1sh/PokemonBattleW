@@ -17,13 +17,13 @@ namespace PokemonBattleW
                 Random rng = new Random();
 
                 // Генериране на случайни стойности за атака и защита
-                int Attack = rng.Next(0, Player.Pokemon.Attack + 1);
-                int Deffence = rng.Next(0, Player.Pokemon.Defence + 1);
+                int A = rng.Next(0, Player.Pokemon.Attack + 1);
+                int D = rng.Next(0, Player.Pokemon.Defence + 1);
 
                 // Ако атаката е по-силна от защитата, се нанася щета
-                if (Attack > Deffence)
+                if (A > D)
                 {
-                    int damage = Attack - Deffence;
+                    int damage = A - D;
                     int previousHealth = Opponent.Pokemon.Health;
 
                     // Намаляване на здравето на противниковия покемон

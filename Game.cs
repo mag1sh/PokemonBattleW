@@ -84,27 +84,8 @@ namespace PokemonBattleW
             switch (izbora)
             {
                 case 1:
-                    // ако покемонът на противника вече е умрял
-                    //if (!Opponent.Pokemon.IsAlive || Opponent.Pokemon.Health <= 0)
-                    //{
-                    //    if (Opponent.Pokemons.Contains(Opponent.Pokemon))
-                    //    {
-                    //        // Премахване на умрелия покемон
-                    //        Opponent.Pokemons.Remove(Opponent.Pokemon);
-
-                    //        // Ако има останали покемони, избира нов
-                    //        if (Opponent.Pokemons.Count > 0)
-                    //        {
-                    //            Game.ChoosePokemon(Opponent);
-                    //            Battle.Attack(Player, Opponent);
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
                         // Извършване на атака
                         Battle.Attack(Player, Opponent);
-                    //}
                     break;
 
                 case 2:
