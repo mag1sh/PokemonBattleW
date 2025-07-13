@@ -65,15 +65,13 @@ namespace PokemonBattleW
             }
         }
 
-        public static void DisplayPokemonsOfPlayer(int activePlayer)
+        public static void DisplayPokemonsOfPlayer(Players activePlayer)
         {
             int br = 1;
-            List<Pokemon> pok;
-            if (activePlayer == 1) { pok = pokemoni1; }
-            else { pok = pokemoni2; }
-            foreach (Pokemon p in pok)
+
+            foreach (Pokemon Pokemon in activePlayer.Pokemons)
             {
-                Console.Write($"{br}.{p.Name}, ");
+                Console.Write($"{br}.{Pokemon.Name}, ");
                 br++;
             }
         }

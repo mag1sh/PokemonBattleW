@@ -16,46 +16,46 @@ namespace PokemonBattleW
         public static string cyan = "\x1b[38;2;80;230;255m";
         public static string slightGreen = "\x1b[38;2;140;220;140m";
 
-        public static void PlayerNaming()
+        public static void PlayerNaming(Players Player, Players Opponent)
         {
-            Console.Write($"{purple}>---------------* Играч 1 избери си име:  {reset}");
-            Battle.PlayerName[1] = Console.ReadLine();
+            Console.Write($"{purple}>---------------* Играч 1 избери си име: {reset}");
+            Player.Name = Console.ReadLine();
             Console.Write($"");
-            Console.Write($"{pink}>---------------* Играч 2 избери си име:  {reset}");
-            Battle.PlayerName[2] = Console.ReadLine();
+            Console.Write($"{pink}>---------------* Играч 2 избери си име: {reset}");
+            Opponent.Name = Console.ReadLine();
             Console.WriteLine("");
         }
-        public static void GameLogic()
+
+        public static void GameLogic(Players Player, Players Opponent)
         {
-            int br = 0;
+            int br = 1;
             while (true)
             {
-                if (Pokemon.pokemoni1.Count > 0)
-                {
-                    Console.WriteLine($"");
-                    Console.WriteLine($"{cyan}---------------| ROUND {br} {reset}");
-                    Console.WriteLine($"");
-                    RegenerateHealth("1");
+                Console.WriteLine($"");
+                Console.WriteLine($"{cyan}---------------| ROUND {br} {reset}");
+                Console.WriteLine($"");
 
-                    Game.izbora(Pokemon.pokemoni1[Battle.activePokemonId1], Pokemon.pokemoni2[Battle.activePokemonId2], 1);
+                if (Player.Pokemons.Count > 0)
+                {
+                    Battle.RegenerateHealth(Player);
+                    Game.izbora(Player, Opponent);
                 }
                 else
                 {
-                    Console.WriteLine($"{Battle.PlayerName[1]} | остана без покемони");
-                    Console.WriteLine($"|-----*-----| {Battle.PlayerName[1]} Спечели |-----*-----|");
+                    Console.WriteLine($"{Player.Name} | остана без покемони");
+                    Console.WriteLine($"{Opponent.Color}|-----*-----| {Opponent.Name} Спечели |-----*-----|{reset}");
                     break;
                 }
 
-                if (Pokemon.pokemoni2.Count > 0)
+                if (Opponent.Pokemons.Count > 0)
                 {
-                    RegenerateHealth("2");
-
-                    Game.izbora(Pokemon.pokemoni2[Battle.activePokemonId2], Pokemon.pokemoni1[Battle.activePokemonId1], 2);
+                    Battle.RegenerateHealth(Opponent);
+                    Game.izbora(Opponent, Player);
                 }
                 else
                 {
-                    Console.WriteLine($"{Battle.PlayerName[2]} | остана без покемони");
-                    Console.WriteLine($"|-----*-----| {Battle.PlayerName[2]} Спечели |-----*-----|");
+                    Console.WriteLine($"{Opponent.Name} | остана без покемони");
+                    Console.WriteLine($"{Player.Color}|-----*-----| {Player.Name} Спечели |-----*-----|{reset}");
                     break;
                 }
                 br++;
@@ -65,145 +65,67 @@ namespace PokemonBattleW
                 Console.Clear();
             }
         }
-        public static void RegenerateHealth(string activePlayer)
+
+        public static void izbora(Players Player, Players Opponent)
         {
-            List<Pokemon> pokemons;
-            int activePokemonId;
-            string playerName;
-            string Color;
-
-            if (activePlayer == "1")
-            {
-                pokemons = Pokemon.pokemoni1;
-                activePokemonId = Battle.activePokemonId1;
-                playerName = Battle.PlayerName[1];
-                Color = purple;
-            }
-            else
-            {
-                pokemons = Pokemon.pokemoni2;
-                activePokemonId = Battle.activePokemonId2;
-                playerName = Battle.PlayerName[2];
-                Color = pink;
-            }
-
-            Console.WriteLine($"{Color}---------------| {playerName} *-----> {pokemons[activePokemonId].Name} | {reset} HP: {pokemons[activePokemonId].Health}");
-            foreach (var p in pokemons)
-            {
-                int previousHealth = p.Health;
-                if (p.IsAlive && pokemons.IndexOf(p) != activePokemonId)
-                {
-                    if (p.Health < 100)
-                    {
-                        p.Health += p.Strength / 10;
-                        if (p.Health >= 100)
-                            p.Health = 100;
-
-                        Console.WriteLine($"{slightGreen}{p.Name} | HP: {p.Health} {reset} ({previousHealth}+{p.Strength / 10})");
-                    }
-                    else
-                    {
-                        p.Health = 100;
-                        Console.WriteLine($"{p.Name} HP: MAX");
-                    }
-                }
-            }
-        }
-        public static int ChoosePokemon(int activePlayer)
-        {
-            Pokemon.DisplayPokemonsOfPlayer(activePlayer);
-            Console.WriteLine($"");
-
-            int id = 0;
-            switch (activePlayer)
-            {
-
-                case 1:
-                    Console.Write($"{purple}{Battle.PlayerName[activePlayer]} | избери своя покемон:{reset}");
-                    id = int.Parse(Console.ReadLine()) - 1;
-                    Console.WriteLine($"{cyan}{Battle.PlayerName[activePlayer]} | избра покемон {Pokemon.pokemoni1[id].Name}{reset}");
-                    Console.WriteLine($"");
-
-                    break;
-
-                case 2:
-                    Console.Write($"{pink}{Battle.PlayerName[activePlayer]} | избери своя покемон:{reset}");
-                    id = int.Parse(Console.ReadLine()) - 1;
-                    Console.WriteLine($"{cyan}{Battle.PlayerName[activePlayer]} | избра покемон {Pokemon.pokemoni2[id].Name}{reset}");
-                    Console.WriteLine($"");
-
-                    break;
-
-            }
-            Console.ResetColor();
-            return id;
-        }
-
-        public static void izbora(Pokemon attacker, Pokemon defender, int activePlayer)
-        {
-            string color = "";
-
-            if (activePlayer == 1) color = purple;
-            if (activePlayer == 2) color = pink;
-
             Console.WriteLine("|-----------* 1.Атака  |  2.Замяна на покемон *-----------|");
-            Console.WriteLine($"{color}----------------------------------------------------------|{reset}");
+            Console.WriteLine($"{Player.Color}----------------------------------------------------------|{reset}");
             Console.Write($">-------------* Изберете следващия ви ход:");
 
-            string choice = Console.ReadLine();
+            int izbora = ReadIntInRange($"", 1, 2);
 
-            switch (choice)
+            switch (izbora)
             {
-                case "1":
-
-                    if (!defender.IsAlive || defender.Health <= 0)
+                case 1:
+                    if (!Opponent.Pokemon.IsAlive || Opponent.Pokemon.Health <= 0)
                     {
+                        if (Opponent.Pokemons.Contains(Opponent.Pokemon))
+                        {
+                            Opponent.Pokemons.Remove(Opponent.Pokemon);
 
-                        if (activePlayer == 1 && Pokemon.pokemoni2.Contains(defender))
-                        {
-                            Pokemon.pokemoni2.Remove(defender);
-                            // Ако има още живи покемони - избираме нов
-                            if (Pokemon.pokemoni2.Count > 0)
+                            if (Opponent.Pokemons.Count > 0)
                             {
-                                Battle.activePokemonId2 = Game.ChoosePokemon(2);
-                            }
-                        }
-                        else if (activePlayer == 2 && Pokemon.pokemoni1.Contains(defender))
-                        {
-                            Pokemon.pokemoni1.Remove(defender);
-                            if (Pokemon.pokemoni1.Count > 0)
-                            {
-                                Battle.activePokemonId1 = Game.ChoosePokemon(1);
+                                Game.ChoosePokemon(Opponent);
+                                Battle.Attack(Player, Opponent);
                             }
                         }
                     }
-
                     else
                     {
-                        Battle.Attack(attacker, defender, activePlayer);
+                        Battle.Attack(Player, Opponent);
                     }
                     break;
-                case "2":
-                    ;
-                    if (activePlayer == 1) { Battle.activePokemonId1 = Game.ChoosePokemon(activePlayer); }
-                    if (activePlayer == 2) { Battle.activePokemonId2 = Game.ChoosePokemon(activePlayer); }
 
+                case 2:                    
+                    Game.ChoosePokemon(Player);
                     break;
             }
         }
-        public static Pokemon CurrentTurnPokemon(int activePlayer)
+    
+        public static void ChoosePokemon(Players activePlayer)
         {
-            switch (activePlayer)
-            {
-                case 1:
-                    Battle.currentTurnPokemon = Pokemon.pokemoni1[Battle.activePokemonId1];
-                    return Battle.currentTurnPokemon;
-                    ;
-                case 2:
-                    Battle.currentTurnPokemon = Pokemon.pokemoni2[Battle.activePokemonId2];
-                    return Battle.currentTurnPokemon;
+            Pokemon.DisplayPokemonsOfPlayer(activePlayer);
+            Console.WriteLine("");
 
-                default: return Battle.currentTurnPokemon;
+            activePlayer.PID = ReadIntInRange($"{activePlayer.Color} {activePlayer.Name} | избери своя покемон:{reset}", 1, activePlayer.Pokemons.Count) - 1;
+            activePlayer.Pokemon = activePlayer.Pokemons[activePlayer.PID];
+            Console.WriteLine($"{cyan}{activePlayer.Name} | избра покемон {activePlayer.Pokemon.Name}{reset}");
+            Console.WriteLine("");
+            Console.ResetColor();
+        }
+
+        public static int ReadIntInRange(string prompt, int min, int max)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out value) && value >= min && value <= max)
+                {
+                    return value;
+                }
+                Console.WriteLine($"{red}Моля, въведете число между {min} и {max}.{reset}");
             }
         }
     }

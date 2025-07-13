@@ -12,16 +12,19 @@ namespace PokemonBattleW
         static void Main(string[] args)
         {
             Pokemon.LoadPokemons();
+            Players Player = new Players(1);
+            Players Opponent = new Players(2);
+
             Console.WriteLine($"{Game.cyan}>------------------| POKEMON BATTLES W2 |-------------------< {Game.reset}\n");
 
-            Game.PlayerNaming();
-
-            Battle.activePokemonId1 = Game.ChoosePokemon(1);
-            Battle.activePokemonId2 = Game.ChoosePokemon(2);
+            Game.PlayerNaming(Player, Opponent);
+            Game.ChoosePokemon(Player);
+            Game.ChoosePokemon(Opponent);
 
             //Pokemon.DisplayPokemonsOfPlayer1();
             //Pokemon.DisplayPokemonsOfPlayer2();
-            Game.GameLogic();
+
+            Game.GameLogic(Player, Opponent);
             Console.ReadLine();
         }
     }

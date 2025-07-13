@@ -8,61 +8,69 @@ namespace PokemonBattleW
 {
     internal class Battle
     {
-        public static int activePokemonId1;
-        public static int activePokemonId2;
-        public static Pokemon currentTurnPokemon;
-        public static Pokemon lastTurnPokemon;
-
-        public static List<string> PlayerName = new List<string> { null, "Kowwai", "Mag1sh" };
-
-        public static void Attack(Pokemon attacker, Pokemon defender, int activePlayer)
+        public static void Attack(Players Player, Players Opponent)
         {
-            if (defender.Health > 0)
+            if (Opponent.Pokemon.Health > 0)
             {
                 Random rng = new Random();
-                int A = rng.Next(0, attacker.Attack + 1);
-                int D = rng.Next(0, attacker.Defence + 1);
+                int Attack = rng.Next(0, Player.Pokemon.Attack + 1);
+                int Deffence = rng.Next(0, Player.Pokemon.Defence + 1);
 
-                if (A > D)
+                if (Attack > Deffence)
                 {
-                    int damage = A - D;
-                    int previousHealth = defender.Health;
-                    defender.Health = Math.Max(0, defender.Health - damage);
-                    Console.WriteLine($"{Game.cyan}{attacker.Name} нанесе щета на {defender.Name}{Game.reset} | {Game.red}{Game.red}{previousHealth}-{damage} {Game.reset}");
+                    int damage = Attack - Deffence;
+                    int previousHealth = Opponent.Pokemon.Health;
+                    Opponent.Pokemon.Health = Math.Max(0, Opponent.Pokemon.Health - damage);
+                    Console.WriteLine($"{Game.cyan}{Player.Pokemon.Name} нанесе щета на {Opponent.Pokemon.Name}{Game.reset} | {Game.red}{Game.red}{previousHealth}-{damage} {Game.reset}");
                     Console.WriteLine();
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine($"{Game.cyan}{attacker.Name} не нанесе щета (D >= A){Game.reset}");
+                    Console.WriteLine($"{Game.cyan}{Player.Pokemon.Name} не нанесе щета (D >= A){Game.reset}");
                     Console.WriteLine();
                     Console.ResetColor();
                 }
-
             }
-            if (defender.Health <= 0)
+
+            if (Opponent.Pokemon.Health <= 0)
             {
-                Console.WriteLine($"{Game.cyan}>-----*Покемонът {defender.Name} умря *-----<{Game.reset}");
-                defender.IsAlive = false;
-                if (Pokemon.pokemoni1.Contains(defender))
+                Console.WriteLine($"{Game.cyan}>-----*Покемонът {Opponent.Pokemon.Name} умря *-----<{Game.reset}");
+                Opponent.Pokemon.IsAlive = false;
+
+                if (Opponent.Pokemons.Contains(Opponent.Pokemon))
                 {
-                    int index = Pokemon.pokemoni1.IndexOf(defender);
-                    Pokemon.pokemoni1.Remove(defender);
-                    if (Pokemon.pokemoni1.Count > 0)
-
-                    Battle.activePokemonId1 = Game.ChoosePokemon(1);
-                    Console.WriteLine($">-----* {PlayerName[1]} Избра нов покемон. Играта продължава *-----<");
-
+                    Opponent.Pokemons.Remove(Opponent.Pokemon);
+                    if (Opponent.Pokemons.Count > 0)
+                    {
+                        Game.ChoosePokemon(Opponent);
+                        Console.WriteLine($">-------* {Opponent.Name} Избра {Opponent.Pokemon.Name}. Играта продължава *-------<\n");
+                    }
                 }
-                else if (Pokemon.pokemoni2.Contains(defender))
+            }
+        }
+
+        public static void RegenerateHealth(Players activePlayer)
+        {
+            Console.WriteLine($"{activePlayer.Color}---------------| {activePlayer.Name} *-----> {activePlayer.Pokemon.Name} | {Game.reset} HP: {activePlayer.Pokemon.Health}");
+
+            foreach (var pokemon in activePlayer.Pokemons)
+            {
+                int previousHealth = pokemon.Health;
+
+                if (pokemon.IsAlive && activePlayer.Pokemons.IndexOf(pokemon) != activePlayer.PID)
                 {
-                    int index = Pokemon.pokemoni2.IndexOf(defender);
-                    Pokemon.pokemoni2.Remove(defender);
-                    if (Pokemon.pokemoni2.Count > 0)
-
-                    Battle.activePokemonId2 = Game.ChoosePokemon(2);
-                    Console.WriteLine($">-----* {PlayerName[2]} Избра нов покемон. Играта продължава *-----<");
-
+                    if (pokemon.Health < 100)
+                    {
+                        pokemon.Health += pokemon.Strength / 10;
+                        if (pokemon.Health >= 100) pokemon.Health = 100;
+                        Console.WriteLine($"{Game.slightGreen}{pokemon.Name} | HP: {pokemon.Health} {Game.reset} ({previousHealth}+{pokemon.Strength / 10})");
+                    }
+                    else
+                    {
+                        pokemon.Health = 100;
+                        Console.WriteLine($"{pokemon.Name} HP: MAX");
+                    }
                 }
             }
         }
