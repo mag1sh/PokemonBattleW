@@ -35,7 +35,7 @@ namespace PokemonBattleW
             while (true)
             {
                 Console.WriteLine($"");
-                Console.WriteLine($"{cyan}---------------| ROUND {br} {reset}");
+                Console.WriteLine($"{green}-----------------------| ROUND {br} |------------------------|{reset}");
                 Console.WriteLine($"");
 
                 // Ход на първия играч
@@ -85,26 +85,26 @@ namespace PokemonBattleW
             {
                 case 1:
                     // ако покемонът на противника вече е умрял
-                    if (!Opponent.Pokemon.IsAlive || Opponent.Pokemon.Health <= 0)
-                    {
-                        if (Opponent.Pokemons.Contains(Opponent.Pokemon))
-                        {
-                            // Премахване на умрелия покемон
-                            Opponent.Pokemons.Remove(Opponent.Pokemon);
+                    //if (!Opponent.Pokemon.IsAlive || Opponent.Pokemon.Health <= 0)
+                    //{
+                    //    if (Opponent.Pokemons.Contains(Opponent.Pokemon))
+                    //    {
+                    //        // Премахване на умрелия покемон
+                    //        Opponent.Pokemons.Remove(Opponent.Pokemon);
 
-                            // Ако има останали покемони, избира нов
-                            if (Opponent.Pokemons.Count > 0)
-                            {
-                                Game.ChoosePokemon(Opponent);
-                                Battle.Attack(Player, Opponent);
-                            }
-                        }
-                    }
-                    else
-                    {
+                    //        // Ако има останали покемони, избира нов
+                    //        if (Opponent.Pokemons.Count > 0)
+                    //        {
+                    //            Game.ChoosePokemon(Opponent);
+                    //            Battle.Attack(Player, Opponent);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
                         // Извършване на атака
                         Battle.Attack(Player, Opponent);
-                    }
+                    //}
                     break;
 
                 case 2:
@@ -122,7 +122,7 @@ namespace PokemonBattleW
             Console.WriteLine("");
 
             // Въвеждане на номер на покемона и задаване като активен
-            activePlayer.PokemonID = ReadIntInRange($"{activePlayer.Color} {activePlayer.Name} | избери своя покемон:{reset}", 1, activePlayer.Pokemons.Count) - 1;
+            activePlayer.PokemonID = ReadIntInRange($"{activePlayer.Color}{activePlayer.Name} | избери своя покемон: {reset}", 1, activePlayer.Pokemons.Count) - 1;
             activePlayer.Pokemon = activePlayer.Pokemons[activePlayer.PokemonID];
             Console.WriteLine($"{cyan}{activePlayer.Name} | избра покемон {activePlayer.Pokemon.Name}{reset}");
             Console.WriteLine("");

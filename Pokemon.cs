@@ -38,25 +38,26 @@ namespace PokemonBattleW
             Owner = owner;
             IsAlive = isAlive;
         }
-        //zарежда покемоните от външен текстов файл
+
+        // Зарежда покемоните от външен текстов файл
         public static void LoadPokemons()
         {
             string filePath = "../../pokemoni.txt";
 
-            //Изчистваме списъците, за да няма повтарящи се записи при повторно зареждане
+            // Изчистваме списъците, за да няма повтарящи се записи при повторно зареждане
             pokemoni1.Clear();
             pokemoni2.Clear();
 
             // Четене на всички редове от файла
             string[] lines = File.ReadAllLines(filePath);
 
-            // Пропускаме заглавния ред (ако има такъв) и обхождаме останалите
+            // Пропускаме заглавния ред и обхождаме останалите
             for (int i = 1; i < lines.Length; i++)
             {
                 string line = lines[i];
                 string[] parts = line.Split(',');
 
-                // Парсваме всяка стойност поотделно
+                // Извличаме и преобразуваме данните на героя от масива parts
                 int id = int.Parse(parts[0]);
                 string name = parts[1];
                 int attack = int.Parse(parts[2]);
@@ -66,10 +67,9 @@ namespace PokemonBattleW
                 int owner = int.Parse(parts[6]);
                 bool isAlive = bool.Parse(parts[7]);
 
-                //създаваме нов покемон с прочетените стойности
+                //Създаваме нов покемон с прочетените стойности и го добавяме в съответния списък според собственика
                 Pokemon pokemonche = new Pokemon(id, name, attack, defence, strength, health, owner, isAlive);
 
-                // Добавяме го в съответния списък според собственика
                 if (owner == 1) pokemoni1.Add(pokemonche);
                 else if (owner == 2) pokemoni2.Add(pokemonche);
             }
@@ -80,7 +80,7 @@ namespace PokemonBattleW
         {
             int br = 1;
 
-            //обхождаме всички покемони на играча и ги отпечатваме под формата: 1.Pikachu, 2.Bulbasaur,...
+            //обхождаме всички покемони на играча и ги отпечатваме под формата: 1.Pikachu, 2.Chirizard,...
             foreach (Pokemon Pokemon in activePlayer.Pokemons)
             {
                 Console.Write($"{br}.{Pokemon.Name}, ");

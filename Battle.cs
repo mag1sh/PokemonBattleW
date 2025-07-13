@@ -8,7 +8,7 @@ namespace PokemonBattleW
 {
     internal class Battle
     {
-        // Метод за извършване на атака от играч към противник
+        // Метод за извършване на атака към противника
         public static void Attack(Players Player, Players Opponent)
         {
             // Проверка дали покемонът на противника е жив
@@ -27,7 +27,7 @@ namespace PokemonBattleW
                     int previousHealth = Opponent.Pokemon.Health;
 
                     // Намаляване на здравето на противниковия покемон
-                    Opponent.Pokemon.Health = Math.Max(0, Opponent.Pokemon.Health - damage);
+                    Opponent.Pokemon.Health = Math.Max(0, previousHealth - damage);
                     Console.WriteLine($"{Game.cyan}{Player.Pokemon.Name} нанесе щета на {Opponent.Pokemon.Name}{Game.reset} | {Game.red}{Game.red}{previousHealth}-{damage} {Game.reset}");
                     Console.WriteLine();
                     Console.ResetColor();
@@ -44,7 +44,7 @@ namespace PokemonBattleW
             // Ако покемонът на противника е с 0 живот, го премахваме от играта
             if (Opponent.Pokemon.Health <= 0)
             {
-                Console.WriteLine($"{Game.cyan}>-----*Покемонът {Opponent.Pokemon.Name} умря *-----<{Game.reset}");
+                Console.WriteLine($"{Game.red}>-----*Покемонът {Opponent.Pokemon.Name} умря *-----<{Game.reset}");
                 Opponent.Pokemon.IsAlive = false;
 
                 if (Opponent.Pokemons.Contains(Opponent.Pokemon))
@@ -55,7 +55,7 @@ namespace PokemonBattleW
                     if (Opponent.Pokemons.Count > 0)
                     {
                         Game.ChoosePokemon(Opponent);
-                        Console.WriteLine($">-------* {Opponent.Name} Избра {Opponent.Pokemon.Name}. Играта продължава *-------<\n");
+                        Console.WriteLine($">-------*{Opponent.Name} избра {Opponent.Pokemon.Name}. Играта продължава *-------<\n");
                     }
                 }
             }
