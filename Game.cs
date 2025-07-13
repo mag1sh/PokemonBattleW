@@ -8,6 +8,7 @@ namespace PokemonBattleW
 {
     internal class Game
     {
+        //Цветови кодове за конзолата
         public static string green = "\x1b[38;2;80;220;120m";
         public static string red = "\x1b[38;2;255;80;80m";
         public static string reset = "\x1b[0m";
@@ -16,6 +17,7 @@ namespace PokemonBattleW
         public static string cyan = "\x1b[38;2;80;230;255m";
         public static string slightGreen = "\x1b[38;2;140;220;140m";
 
+        //метод за въвеждане на имена от двамата играчи
         public static void PlayerNaming(Players Player, Players Opponent)
         {
             Console.Write($"{purple}>---------------* Играч 1 избери си име: {reset}");
@@ -26,6 +28,7 @@ namespace PokemonBattleW
             Console.WriteLine("");
         }
 
+        // основна логика на играта — цикъл от рундове
         public static void GameLogic(Players Player, Players Opponent)
         {
             int br = 1;
@@ -35,10 +38,11 @@ namespace PokemonBattleW
                 Console.WriteLine($"{cyan}---------------| ROUND {br} {reset}");
                 Console.WriteLine($"");
 
+                // Ход на първия играч
                 if (Player.Pokemons.Count > 0)
                 {
-                    Battle.RegenerateHealth(Player);
-                    Game.izbora(Player, Opponent);
+                    Battle.RegenerateHealth(Player); // регенерира здравето на неактивните покемони
+                    Game.izbora(Player, Opponent); // избор какво да направи играчът
                 }
                 else
                 {
@@ -47,6 +51,7 @@ namespace PokemonBattleW
                     break;
                 }
 
+                // Ход на втория играч
                 if (Opponent.Pokemons.Count > 0)
                 {
                     Battle.RegenerateHealth(Opponent);
@@ -60,12 +65,14 @@ namespace PokemonBattleW
                 }
                 br++;
 
+                // Изчакване за следващ рунд
                 Console.WriteLine("Натиснете клавиш за следващия рунд...");
                 Console.ReadKey();
                 Console.Clear();
             }
         }
 
+        //избор на действие от играча (атака или смяна на покемон)
         public static void izbora(Players Player, Players Opponent)
         {
             Console.WriteLine("|-----------* 1.Атака  |  2.Замяна на покемон *-----------|");
@@ -77,12 +84,15 @@ namespace PokemonBattleW
             switch (izbora)
             {
                 case 1:
+                    // ако покемонът на противника вече е умрял
                     if (!Opponent.Pokemon.IsAlive || Opponent.Pokemon.Health <= 0)
                     {
                         if (Opponent.Pokemons.Contains(Opponent.Pokemon))
                         {
+                            // Премахване на умрелия покемон
                             Opponent.Pokemons.Remove(Opponent.Pokemon);
 
+                            // Ако има останали покемони, избира нов
                             if (Opponent.Pokemons.Count > 0)
                             {
                                 Game.ChoosePokemon(Opponent);
@@ -92,28 +102,34 @@ namespace PokemonBattleW
                     }
                     else
                     {
+                        // Извършване на атака
                         Battle.Attack(Player, Opponent);
                     }
                     break;
 
-                case 2:                    
+                case 2:
+                    // Смяна на покемона
                     Game.ChoosePokemon(Player);
                     break;
             }
         }
-    
+
+        // Избор на активен покемон от списъка
         public static void ChoosePokemon(Players activePlayer)
         {
+            // Показва всички покемони на играча
             Pokemon.DisplayPokemonsOfPlayer(activePlayer);
             Console.WriteLine("");
 
-            activePlayer.PID = ReadIntInRange($"{activePlayer.Color} {activePlayer.Name} | избери своя покемон:{reset}", 1, activePlayer.Pokemons.Count) - 1;
-            activePlayer.Pokemon = activePlayer.Pokemons[activePlayer.PID];
+            // Въвеждане на номер на покемона и задаване като активен
+            activePlayer.PokemonID = ReadIntInRange($"{activePlayer.Color} {activePlayer.Name} | избери своя покемон:{reset}", 1, activePlayer.Pokemons.Count) - 1;
+            activePlayer.Pokemon = activePlayer.Pokemons[activePlayer.PokemonID];
             Console.WriteLine($"{cyan}{activePlayer.Name} | избра покемон {activePlayer.Pokemon.Name}{reset}");
             Console.WriteLine("");
             Console.ResetColor();
         }
 
+        // Проверка дали въведеното от потребителя е число в даден интервал
         public static int ReadIntInRange(string prompt, int min, int max)
         {
             int value;
@@ -121,10 +137,14 @@ namespace PokemonBattleW
             {
                 Console.Write(prompt);
                 string input = Console.ReadLine();
+
+                //проверка дали въведеният текст е число и дали е в диапазона
                 if (int.TryParse(input, out value) && value >= min && value <= max)
                 {
                     return value;
                 }
+
+                //Ако не е валидно число, показва грешка и иска ново въвеждане
                 Console.WriteLine($"{red}Моля, въведете число между {min} и {max}.{reset}");
             }
         }

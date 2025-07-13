@@ -8,18 +8,25 @@ namespace PokemonBattleW
 {
     internal class Battle
     {
+        // Метод за извършване на атака от играч към противник
         public static void Attack(Players Player, Players Opponent)
         {
+            // Проверка дали покемонът на противника е жив
             if (Opponent.Pokemon.Health > 0)
             {
                 Random rng = new Random();
+
+                // Генериране на случайни стойности за атака и защита
                 int Attack = rng.Next(0, Player.Pokemon.Attack + 1);
                 int Deffence = rng.Next(0, Player.Pokemon.Defence + 1);
 
+                // Ако атаката е по-силна от защитата, се нанася щета
                 if (Attack > Deffence)
                 {
                     int damage = Attack - Deffence;
                     int previousHealth = Opponent.Pokemon.Health;
+
+                    // Намаляване на здравето на противниковия покемон
                     Opponent.Pokemon.Health = Math.Max(0, Opponent.Pokemon.Health - damage);
                     Console.WriteLine($"{Game.cyan}{Player.Pokemon.Name} нанесе щета на {Opponent.Pokemon.Name}{Game.reset} | {Game.red}{Game.red}{previousHealth}-{damage} {Game.reset}");
                     Console.WriteLine();
@@ -27,12 +34,14 @@ namespace PokemonBattleW
                 }
                 else
                 {
+                    // Атаката не е достатъчно силна, за да пробие защитата
                     Console.WriteLine($"{Game.cyan}{Player.Pokemon.Name} не нанесе щета (D >= A){Game.reset}");
                     Console.WriteLine();
                     Console.ResetColor();
                 }
             }
 
+            // Ако покемонът на противника е с 0 живот, го премахваме от играта
             if (Opponent.Pokemon.Health <= 0)
             {
                 Console.WriteLine($"{Game.cyan}>-----*Покемонът {Opponent.Pokemon.Name} умря *-----<{Game.reset}");
@@ -41,6 +50,8 @@ namespace PokemonBattleW
                 if (Opponent.Pokemons.Contains(Opponent.Pokemon))
                 {
                     Opponent.Pokemons.Remove(Opponent.Pokemon);
+
+                    //Ако останали покемони -> избор на нов активен покемон
                     if (Opponent.Pokemons.Count > 0)
                     {
                         Game.ChoosePokemon(Opponent);
@@ -50,6 +61,7 @@ namespace PokemonBattleW
             }
         }
 
+        //Метод за регенерация на здраве на всички неактивни покемони на играча
         public static void RegenerateHealth(Players activePlayer)
         {
             Console.WriteLine($"{activePlayer.Color}---------------| {activePlayer.Name} *-----> {activePlayer.Pokemon.Name} | {Game.reset} HP: {activePlayer.Pokemon.Health}");
@@ -58,16 +70,19 @@ namespace PokemonBattleW
             {
                 int previousHealth = pokemon.Health;
 
-                if (pokemon.IsAlive && activePlayer.Pokemons.IndexOf(pokemon) != activePlayer.PID)
+                // Регенерира само живите и неактивни покемони
+                if (pokemon.IsAlive && activePlayer.Pokemons.IndexOf(pokemon) != activePlayer.PokemonID)
                 {
                     if (pokemon.Health < 100)
                     {
+                        // Възстановява здравето на базата на силата
                         pokemon.Health += pokemon.Strength / 10;
                         if (pokemon.Health >= 100) pokemon.Health = 100;
                         Console.WriteLine($"{Game.slightGreen}{pokemon.Name} | HP: {pokemon.Health} {Game.reset} ({previousHealth}+{pokemon.Strength / 10})");
                     }
                     else
                     {
+                        //Здравето вече е на максимум
                         pokemon.Health = 100;
                         Console.WriteLine($"{pokemon.Name} HP: MAX");
                     }
