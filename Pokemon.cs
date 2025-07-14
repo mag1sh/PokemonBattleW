@@ -12,7 +12,7 @@ namespace PokemonBattleW
 {
     internal class Pokemon
     {
-        // Списъци с покемони за играч 1 и играч 2
+        // Списъци с покемони за играч 1 и играч 2 9999
         public static List<Pokemon> pokemoni1 { get; private set; } = new List<Pokemon>();
         public static List<Pokemon> pokemoni2 { get; private set; } = new List<Pokemon>();
 
