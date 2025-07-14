@@ -11,6 +11,9 @@ namespace PokemonBattleW
     {
         static void Main(string[] args)
         {
+            //new brach add comement
+
+
             Pokemon.LoadPokemons();
             Players Player = new Players(1);
             Players Opponent = new Players(2);
